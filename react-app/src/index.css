@@ -100,3 +100,14 @@ input {
   color: #000; /* Black color for the text */
   background-color: #fff; /* White background for input fields */
 }
+.name-fields {
+	display:flex;
+	align-items:center;
+
+}
+.name-fields label{
+	margin-right:20px; /* Adjust as per your design */
+	flex-grow:1;
+
+
+}

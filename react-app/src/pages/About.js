@@ -123,7 +123,7 @@ export default function About() {
           }
         }}
       >
-        <fieldset>
+        <fieldset class="name-fields">
           <label>
             <p>FP First Name</p>
             <input
@@ -144,8 +144,10 @@ export default function About() {
               value={formData.FPLastName}
               onChange={handleInputChange}
             />
-            {errors.FPLastName && <div style={{ color: 'red', fontSize: '14px' }}>{errors.FPLastName}</div>}
+            {errors.FPLastName && <div style={{ color: 'red', fontSize: '14px' }}>{errors.FPLastName}</div>}   
           </label>
+          </fieldset>
+          <fieldset class="name-fields">
           <label>
             <p>FP Code</p>
             <input
@@ -226,17 +228,23 @@ export default function About() {
                 alt={selectedCard}
                 style={{ width: '100px', height: 'auto' }}
               />
-              <label>
+              <label class="">
+              <fieldset name="name-fields">
                 <p>Card Number</p>
                 <input
                   type="text"
                   name="CardNumber"
                   placeholder="XXXX-XXXX-XXXX-XXXX"
                   value={formData.CardNumber}
-                  onChange={handleInputChange}
+                  onChange={handleInputChange}               
                 />
+                </fieldset>
+
+
               </label>
               <label>
+              <fieldset name="name-fields">
+
                 <p>Expiration Date</p>
                 <input
                   type="text"
@@ -245,7 +253,9 @@ export default function About() {
                   value={formData.ExpirationDate}
                   onChange={handleInputChange}
                 />
+                </fieldset>
               </label>
+              
               <label>
                 <p>CVV</p>
                 <input
