@@ -15,12 +15,9 @@ const handleSubmit = (event, details, setDetails, setSelectedCard, setFormData) 
   event.preventDefault();
 
   const form = event.target;
-  const visaChecked = form.querySelector('input[name="Visa"]').checked;
-  const masterChecked = form.querySelector('input[name="Master"]').checked;
-  const discoverChecked = form.querySelector('input[name="Discover"]').checked;
-  const expressChecked = form.querySelector('input[name="Express"]').checked;
-
-  const cardType = visaChecked ? 'Visa' : masterChecked ? 'Master' : discoverChecked ? 'Discover' : 'Express';
+  const cardType = Object.keys(cardImages).find(
+    (type) => form.querySelector(`input[name="${type}"]`).checked
+  );
 
   const cardNumber = form.querySelector('input[name="CardNumber"]').value;
   const amount = form.querySelector('input[name="Amount"]').value;
@@ -105,9 +102,8 @@ export default function About() {
     }
   };
 
-  const handleCheckboxChange = (event) => {
-    const { name } = event.target;
-    setSelectedCard(selectedCard === name ? null : name);
+  const handleCardSelection = (cardType) => {
+    setSelectedCard(selectedCard === cardType ? null : cardType);
   };
 
   return (
@@ -123,7 +119,7 @@ export default function About() {
           }
         }}
       >
-        <fieldset class="name-fields">
+        <fieldset className="name-fields">
           <label>
             <p>FP First Name</p>
             <input
@@ -146,8 +142,8 @@ export default function About() {
             />
             {errors.FPLastName && <div style={{ color: 'red', fontSize: '14px' }}>{errors.FPLastName}</div>}   
           </label>
-          </fieldset>
-          <fieldset class="name-fields">
+        </fieldset>
+        <fieldset className="name-fields">
           <label>
             <p>FP Code</p>
             <input
@@ -182,44 +178,19 @@ export default function About() {
             {errors.FPNumber && <div style={{ color: 'red', fontSize: '14px' }}>{errors.FPNumber}</div>}
           </label>
         </fieldset>
-        <fieldset className="checkboxes">
-          <label>
-            <input
-              type="checkbox"
-              name="Visa"
-              onChange={handleCheckboxChange}
-              checked={selectedCard === "Visa"}
-            />
-            Visa
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="Master"
-              onChange={handleCheckboxChange}
-              checked={selectedCard === "Master"}
-            />
-            Mastercard
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="Discover"
-              onChange={handleCheckboxChange}
-              checked={selectedCard === "Discover"}
-            />
-            Discover
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="Express"
-              onChange={handleCheckboxChange}
-              checked={selectedCard === "Express"}
-            />
-            American Express
-          </label>
-        </fieldset>
+        <div className="card-selection">
+          {Object.keys(cardImages).map((cardType) => (
+            <label key={cardType} className={`card-option ${selectedCard === cardType ? 'selected' : ''}`}>
+              <input
+                type="checkbox"
+                name={cardType}
+                onChange={() => handleCardSelection(cardType)}
+                checked={selectedCard === cardType}
+              />
+              <img src={cardImages[cardType]} alt={cardType} />
+            </label>
+          ))}
+        </div>
         {selectedCard && (
           <fieldset className="card-details">
             <div className="card-info">
@@ -228,94 +199,97 @@ export default function About() {
                 alt={selectedCard}
                 style={{ width: '100px', height: 'auto' }}
               />
-              <label class="">
-              <fieldset name="name-fields">
-                <p>Card Number</p>
-                <input
-                  type="text"
-                  name="CardNumber"
-                  placeholder="XXXX-XXXX-XXXX-XXXX"
-                  value={formData.CardNumber}
-                  onChange={handleInputChange}               
-                />
-                </fieldset>
+              <div className="card-number-exp">
+                <label>
+                  <p>Card Number</p>
+                  <input
+                    type="text"
+                    name="CardNumber"
+                    placeholder="XXXX-XXXX-XXXX-XXXX"
+                    value={formData.CardNumber}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Expiration Date</p>
+                  <input
+                    type="text"
+                    name="ExpirationDate"
+                    placeholder="MM/YY"
+                    value={formData.ExpirationDate}
+                    onChange={handleInputChange}
+                  />
+                </label>
+              </div>
 
+              <div className="cvv-zip-amount">
+                <label>
+                  <p>CVV</p>
+                  <input
+                    type="text"
+                    name="CVV"
+                    placeholder="XXX"
+                    value={formData.CVV}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Zip Code</p>
+                  <input
+                    type="text"
+                    name="ZipCode"
+                    placeholder="Enter Zip Code"
+                    value={formData.ZipCode}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Amount</p>
+                  <input
+                    type="text"
+                    name="Amount"
+                    placeholder="Enter the Dollar Amount"
+                    value={formData.Amount}
+                    onChange={handleInputChange}
+                  />
+                </label>
+              </div>
 
-              </label>
-              <label>
-              <fieldset name="name-fields">
+              <div className="billing-city">
+                <label>
+                  <p>Billing Address</p>
+                  <input
+                    type="text"
+                    name="BillingAddress"
+                    placeholder="Enter Billing Address"
+                    value={formData.BillingAddress}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>City</p>
+                  <input
+                    type="text"
+                    name="City"
+                    placeholder="Enter City"
+                    value={formData.City}
+                    onChange={handleInputChange}
+                  />
+                </label>
+              </div>
 
-                <p>Expiration Date</p>
-                <input
-                  type="text"
-                  name="ExpirationDate"
-                  placeholder="MM/YY"
-                  value={formData.ExpirationDate}
-                  onChange={handleInputChange}
-                />
-                </fieldset>
-              </label>
-              
-              <label>
-                <p>CVV</p>
-                <input
-                  type="text"
-                  name="CVV"
-                  placeholder="XXX"
-                  value={formData.CVV}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Amount</p>
-                <input
-                  type="text"
-                  name="Amount"
-                  placeholder="Enter the Dollar Amount"
-                  value={formData.Amount}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Billing Address</p>
-                <input
-                  type="text"
-                  name="BillingAddress"
-                  placeholder="Enter Billing Address"
-                  value={formData.BillingAddress}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>City</p>
-                <input
-                  type="text"
-                  name="City"
-                  placeholder="Enter City"
-                  value={formData.City}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>State</p>
-                <input
-                  type="text"
-                  name="State"
-                  placeholder="Enter State"
-                  value={formData.State}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Zip Code</p>
-                <input
-                  type="text"
-                  name="ZipCode"
-                  placeholder="Enter Zip Code"
-                  value={formData.ZipCode}
-                  onChange={handleInputChange}
-                />
-              </label>
+              <div className="state">
+                <label>
+                  <p>State</p>
+                  <input
+                    type="text"
+                    name="State"
+                    placeholder="Enter State"
+                    value={formData.State}
+                    onChange={handleInputChange}
+                  />
+                </label>
+              </div>
             </div>
           </fieldset>
         )}
